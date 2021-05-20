@@ -1,0 +1,11 @@
+First, generate root CA with
+
+  bash generate_root_ca.sh
+
+then, generate derived certificates with 
+
+  bash generate_derived_certs.sh
+
+and copy to destination, i.e. with
+
+  bash copy.sh ../secrets
