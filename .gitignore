@@ -1,3 +1,5 @@
 etc/smbcredentials
 **/tini
+keys/**
+secrets/**
 **/tini.asc

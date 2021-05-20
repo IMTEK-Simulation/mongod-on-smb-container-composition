@@ -15,7 +15,18 @@ services:
       TZ: Europe/Berlin
     command: --config /etc/mongod.conf
     security_opt:
-     - label=disable
+      - label=disable
+    secrets:
+      - source: mongodb_username
+        target: username
+      - source: mongodb_password
+        target: password
+      - source: mongodb_tls_key
+        target: tls_key.pem
+      - source: mongodb_tls_cert
+        target: tls_cert.pem
+      - source: mongodb_tls_key_cert
+        target: tls_key_cert.pem
 
   mongodb-backup:
     image: imteksim/mongodb-backup:${MONGODB_BACKUP_CONTAINER_IMAGE_VERSION}
@@ -28,7 +39,15 @@ services:
     environment:
        TZ: Europe/Berlin
     security_opt:
-     - label=disable
+      - label=disable
+    secrets:
+      - source: mongodb_backup_tls_key
+        target: tls_key.pem
+      - source: mongodb_backup_tls_cert
+        target: tls_cert.pem
+      - source: mongodb_backup_tls_key_cert
+        target: tls_key_cert.pem
+
 
   sambaserver-db:
     image: dperson/samba:${SAMBA_CONTAINER_IMAGE_VERSION}
@@ -50,4 +69,24 @@ services:
       - "139"
       - "445"
     ports:
-      - "4445:445"
+      - "5445:445"
+
+secrets:
+  mongodb_username:
+    file: secrets/mongodb/username
+  mongodb_password:
+    file: secrets/mongodb/password
+  mongodb_tls_key:
+    file: secrets/mongodb/tls_key.pem
+  mongodb_tls_cert:
+    file: secrets/mongodb/tls_cert.pem
+  mongodb_tls_key_cert:
+    file: secrets/mongodb/tls_key_cert.pem
+  mongodb_backup_tls_key:
+    file: secrets/mongodb_backup/tls_key.pem
+  mongodb_backup_tls_cert:
+    file: secrets/mongodb_backup/tls_cert.pem
+  mongodb_backup_tls_key_cert:
+    file: secrets/mongodb_backup/tls_key_cert.pem
+  root_ca:
+    file: secrets/rootCA.pem
