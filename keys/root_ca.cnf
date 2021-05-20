@@ -1,0 +1,25 @@
+# source: http://apetec.com/support/GenerateSAN-CSR.htm
+
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+
+[req_distinguished_name]
+countryName = DE
+countryName_default = DE
+stateOrProvinceName = Some state
+localityName = Some place
+organizationName= Some organization
+organizationalUnitName = Some department
+emailAddress = some@mail.address
+
+[ v3_req ]
+# Extensions to add to a certificate request
+# authorityKeyIdentifier=keyid,issuer
+basicConstraints = CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = some.public.domain.de
+ IP.1 = 123.123.123.123

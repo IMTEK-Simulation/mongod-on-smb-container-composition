@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: imteksim/mongod-on-smb:0.1.0
+    restart: always
+    container_name: mongodb
+    cap_add:
+      - CAP_SYS_ADMIN
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongodb/username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongodb/password
+      TZ: Europe/Berlin
+    command: --config /etc/mongod.conf
+    security_opt:
+     - label=disable
+
+  mongodb-backup:
+    image: imteksim/mongodb-backup:0.1.0
+    restart: always
+    container_name: mongodb-backup
+    cap_add:
+      - CAP_SYS_ADMIN
+    depends_on:
+      - mongodb
+    environment:
+       TZ: Europe/Berlin
+    security_opt:
+     - label=disable
