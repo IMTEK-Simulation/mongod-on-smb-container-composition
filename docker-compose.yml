@@ -10,8 +10,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/mongodb/username
-      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongodb/password
+      MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/username
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password
       TZ: Europe/Berlin
     command: --config /etc/mongod.conf
     security_opt:
@@ -27,6 +27,8 @@ services:
         target: tls_cert.pem
       - source: mongodb_tls_key_cert
         target: tls_key_cert.pem
+      - source: root_ca
+        target: rootCA.pem
 
   mongodb-backup:
     image: imteksim/mongodb-backup:${MONGODB_BACKUP_CONTAINER_IMAGE_VERSION}
@@ -41,12 +43,18 @@ services:
     security_opt:
       - label=disable
     secrets:
+      - source: mongodb_username
+        target: username
+      - source: mongodb_password
+        target: password
       - source: mongodb_backup_tls_key
         target: tls_key.pem
       - source: mongodb_backup_tls_cert
         target: tls_cert.pem
       - source: mongodb_backup_tls_key_cert
         target: tls_key_cert.pem
+      - source: root_ca
+        target: rootCA.pem
 
 
   sambaserver-db:

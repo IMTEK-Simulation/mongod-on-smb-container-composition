@@ -18,7 +18,8 @@ jobs:
 
         echo "generate certs and keys"
         cd keys
-        bash generate.sh
+        bash generate_root_ca.sh
+        bash generate_derived_certs.sh
         bash copy.sh ../secrets
 
     - name: Bring up container composition
