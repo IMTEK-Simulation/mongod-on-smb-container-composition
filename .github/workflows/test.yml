@@ -1,0 +1,45 @@
+name: test
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Git checkout this
+      uses: actions/checkout@v2
+
+    - name: Pull container images and prepare composition
+      run: |
+        docker-compose pull 
+        echo "docker image ls"
+        docker image ls
+
+        echo "generate certs and keys"
+        cd keys
+        bash generate.sh
+        bash copy.sh ../secrets
+
+    - name: Bring up container composition
+      run: |       
+        docker-compose -p mongod-on-smb-container-composition up -d --no-build  # will pull missing images with build command in compose file
+
+        sleep 10
+       
+        echo "docker container ls --all"
+        docker container ls --all
+
+        echo "docker volume ls"
+        docker volume ls
+        
+        echo "docker images"
+        docker-compose images
+
+        echo "mongod log"
+        docker-compose logs mongod-on-smb
+        
+        echo "mongodb backup service log"
+        docker-compose logs mongodb-backup
+
+        # sleep 10 # run more tests
