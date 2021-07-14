@@ -12,35 +12,46 @@ jobs:
 
     - name: Pull container images and prepare composition
       run: |
-        docker-compose pull 
-        echo "docker image ls"
+      # see https://github.com/nektos/act/issues/724#issuecomment-855390956
+        sudo chown runner:docker /var/run/docker.sock
+
+        echo "> docker compose pull"
+        docker-compose pull
+        echo "> docker image ls"
         docker image ls
 
-        echo "generate certs and keys"
+        echo "> pwd"
+        pwd
+        echo "ls -lha"
+        ls -lha
+
+        echo "-- generate certs and keys --"
         cd keys
         bash generate_root_ca.sh
         bash generate_derived_certs.sh
         bash copy.sh ../secrets
 
     - name: Bring up container composition
-      run: |       
+      run: |
         docker-compose -p mongod-on-smb-container-composition up -d --no-build  # will pull missing images with build command in compose file
 
         sleep 10
-       
-        echo "docker container ls --all"
+
+        echo "> docker container ls --all"
         docker container ls --all
 
-        echo "docker volume ls"
+        echo "> docker volume ls"
         docker volume ls
-        
-        echo "docker images"
+
+        echo "-- docker images --"
         docker-compose images
 
-        echo "mongod log"
-        docker-compose logs mongod-on-smb
-        
-        echo "mongodb backup service log"
+        echo "-- mongodb log --"
+        docker-compose logs mongodb
+
+        echo "-- mongodb-backup log --"
         docker-compose logs mongodb-backup
 
-        # sleep 10 # run more tests
+        sleep 10 # run more tests
+
+        docker-compose down
