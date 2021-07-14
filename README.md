@@ -1,5 +1,8 @@
 # IMTEK Simulation MongoDB
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/IMTEK-Simulation/mongod-on-smb-container-composition/test)](https://github.com/IMTEK-Simulation/mongod-on-smb-container-composition/actions?query=workflow%3Atest)
+
+
 Copyright 2021, IMTEK Simulation, University of Freiburg
 
 Author: Johannes Hoermann, johannes.hoermann@imtek.uni-freiburg.de
