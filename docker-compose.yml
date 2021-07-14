@@ -12,6 +12,8 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME_FILE: /run/secrets/username
       MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/password
+      SMB_HOST: sambaserver-db
+      SMB_SHARE: sambashare
       TZ: Europe/Berlin
     command: --config /etc/mongod.conf
     security_opt:
@@ -29,6 +31,8 @@ services:
         target: tls_key_cert.pem
       - source: root_ca
         target: rootCA.pem
+      - source: smb_credentials_db
+        target: smb-credentials
 
   mongodb-backup:
     image: imteksim/mongodb-backup:${MONGODB_BACKUP_CONTAINER_IMAGE_VERSION}
@@ -39,7 +43,9 @@ services:
     depends_on:
       - mongodb
     environment:
-       TZ: Europe/Berlin
+      SMB_HOST: sambaserver-backup
+      SMB_SHARE: sambashare
+      TZ: Europe/Berlin
     security_opt:
       - label=disable
     secrets:
@@ -55,6 +61,8 @@ services:
         target: tls_key_cert.pem
       - source: root_ca
         target: rootCA.pem
+      - source: smb_credentials_backup
+        target: smb-credentials
 
 
   sambaserver-db:
@@ -80,6 +88,10 @@ services:
       - "5445:445"
 
 secrets:
+  smb_credentials_db:
+    file: secrets/mongodb/smb-credentials
+  smb_credentials_backup:
+    file: secrets/mongodb_backup/smb-credentials
   mongodb_username:
     file: secrets/mongodb/username
   mongodb_password:
