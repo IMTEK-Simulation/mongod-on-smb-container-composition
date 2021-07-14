@@ -12,8 +12,8 @@ jobs:
 
     - name: Pull container images and prepare composition
       run: |
-      # see https://github.com/nektos/act/issues/724#issuecomment-855390956
         sudo chown runner:docker /var/run/docker.sock
+        # see https://github.com/nektos/act/issues/724#issuecomment-855390956
 
         echo "> docker compose pull"
         docker-compose pull
