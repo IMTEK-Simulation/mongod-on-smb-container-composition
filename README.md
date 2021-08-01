@@ -9,30 +9,24 @@ Author: Johannes Hoermann, johannes.hoermann@imtek.uni-freiburg.de
 ## Introduction
 
 This container composition provides a mongodb server and a backup service
-both operaing on independent smb shares. It serves as testing framework 
+both operaing on independent smb shares. It serves as testing framework
 and template for provision. Components are
 
-* https://hub.docker.com/r/imteksim/mongod-on-smb, https://github.com/IMTEK-Simulation/mongod-on-smb-container-image
-* https://hub.docker.com/r/imteksim/mongodb-backup, https://github.com/IMTEK-Simulation/mongodb-backup-container-image
-* https://hub.docker.com/r/dperson/samba
+* [imteksim/mongodb-on-smb on dockerhub](https://hub.docker.com/r/imteksim/mongod-on-smb), [on github](https://github.com/IMTEK-Simulation/mongod-on-smb-container-image)
+* [imteksim/mongodb-backup on dockerhub](https://hub.docker.com/r/imteksim/mongodb-backup), [on github](https://github.com/IMTEK-Simulation/mongodb-backup-container-image)
+* [https://hub.docker.com/r/dperson/samba
 
-## Keys
+## Secrets
 
-Use `bash generate.sh` and `bash copy.sh DEST` within this repository's
-`keys` subdirectory to generate all required `*.pem' keys and self-signed 
-certificates and place them at some desired `DEST` location for testing purpose.
+Use `bash generate_root_ca.sh`, `bash generate_derived_certs.sh`, and
+`bash copy.sh ../secrets`  within this repository's `keys` subdirectory to
+generate all required `*.pem' keys and self-signed certificates and place them
+within the `secrets` subdirectory for testing purpose.
 `tls_key_cert.pem` files are just concatenated `tls_key.pem` and `tls_cert.pem`
-files. `mongodb` expects them concatenated in one file, while `mongo-express`
-needs them separate. For convenience, both split and combined formats are provided 
-in all cases. The separate sets of keys an certificates fulfill the following 
-purposes:
+files. For convenience, both split and combined formats are provided
+in all cases.
 
-- `/run/secrets/rootCA.pem` is the certificate chain client's certificates are
-  checked against by the `mongodb` service.
-- `/run/secrets/mongodb/tls_key_cert.pem` are tsl key and cert used by `mongodb`
-  for any communication.
-
-Next to keys and certificates, the following sensitive data must be provided via secrets:
+The following sensitive data must be provided via secrets:
 
 * `secrets/mongodb/smb-credentials`
 * `secrets/mongodb_backup/smb-credentials`
