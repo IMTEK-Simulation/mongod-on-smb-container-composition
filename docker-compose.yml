@@ -5,6 +5,7 @@ services:
     image: imteksim/mongod-on-smb:${MONGOD_ON_SMB_CONTAINER_IMAGE_VERSION}
     restart: always
     container_name: mongodb
+    privileged: true
     cap_add:
       - SYS_ADMIN
     ports:
@@ -38,6 +39,7 @@ services:
     image: imteksim/mongodb-backup:${MONGODB_BACKUP_CONTAINER_IMAGE_VERSION}
     restart: always
     container_name: mongodb-backup
+    privileged: true
     cap_add:
       - SYS_ADMIN
     depends_on:
