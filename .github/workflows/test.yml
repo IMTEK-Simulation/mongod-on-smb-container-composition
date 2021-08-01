@@ -54,4 +54,5 @@ jobs:
 
         sleep 10 # run more tests
 
+        # TODO: needs test for smb share availability, mongodb availability, backup procedures
         docker-compose down
