@@ -4,10 +4,11 @@ services:
   mongodb:
     image: imteksim/mongod-on-smb:${MONGOD_ON_SMB_CONTAINER_IMAGE_VERSION}
     restart: always
-    container_name: mongodb
     privileged: true
     cap_add:
       - SYS_ADMIN
+    depends_on:
+      - sambaserver-db
     ports:
       - "27017:27017"
     environment:
@@ -38,12 +39,12 @@ services:
   mongodb-backup:
     image: imteksim/mongodb-backup:${MONGODB_BACKUP_CONTAINER_IMAGE_VERSION}
     restart: always
-    container_name: mongodb-backup
     privileged: true
     cap_add:
       - SYS_ADMIN
     depends_on:
       - mongodb
+      - sambaserver-backup
     environment:
       SMB_HOST: sambaserver-backup
       SMB_SHARE: sambashare
@@ -70,7 +71,6 @@ services:
   sambaserver-db:
     image: dperson/samba:${SAMBA_CONTAINER_IMAGE_VERSION}
     restart: always
-    container_name: smb-db
     command: -p -S -w WORKGROUP -s sambashare;/share;yes;no;yes
     expose:
       - "139"
@@ -81,7 +81,6 @@ services:
   sambaserver-backup:
     image: dperson/samba:${SAMBA_CONTAINER_IMAGE_VERSION}
     restart: always
-    container_name: smb-backup
     command: -p -S -w WORKGROUP -s sambashare;/share;yes;no;yes
     expose:
       - "139"
