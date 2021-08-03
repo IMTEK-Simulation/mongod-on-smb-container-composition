@@ -61,7 +61,7 @@ Enter the freshly running `mongodb` container, i.e. via
 enter the mongo shell with
 
     mongo --tls --tlsCAFile /run/secrets/rootCA.pem --tlsCertificateKeyFile \
-        /run/secrets/mongodb/tls_key_cert.pem --host mongodb
+        /run/secrets/tls_key_cert.pem --host mongodb
 
 and run the adapted `init_rs.js` snippet, i.e.
 
@@ -115,7 +115,7 @@ Look at the database at `https://localhost:8081` or try to connect to the databa
 from within the mongo container with
 
     mongo --tls --tlsCAFile /run/secrets/rootCA.pem --tlsCertificateKeyFile \
-        /run/secrets/mongodb/tls_key_cert.pem --host mongodb
+        /run/secrets/tls_key_cert.pem --host mongodb
 
 or from the host system
 
