@@ -22,7 +22,7 @@ openssl req -new -key "${subdir}/tls_key.pem" -out "${subdir}/tls_cert.csr" -con
 # print request to stdout
 openssl req -text -noout -in "${subdir}/tls_cert.csr"
 # generate self-signed certifictae
-openssl x509 -req -in "${subdir}/tls_cert.csr" -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out "${subdir}/tls_cert.pem" -days 500 -sha256
+openssl x509 -req -in "${subdir}/tls_cert.csr" -CA rootCA.pem -CAkey rootCA.key -CAcreateserial -out "${subdir}/tls_cert.pem" -days 500 -sha256 -extensions v3_req -extfile "${conf}"
 # concatenate key and signed certificate in simple file
 cat "${subdir}"/tls_key.pem "${subdir}/tls_cert.pem" > "${subdir}/tls_key_cert.pem"
 # concatenate key and signed certificate in p12 file
